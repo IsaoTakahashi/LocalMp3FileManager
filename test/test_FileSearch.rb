@@ -35,7 +35,7 @@ class TestFileSearch < Test::Unit::TestCase
   end
 
   def test_search_mp3
-  	file_count = FileSearch.search_mp3("./")
-  	assert_equal(0,file_count)
+  	files = FileSearch.search_mp3("./")
+  	assert_equal(0,files.count)
   end
 end

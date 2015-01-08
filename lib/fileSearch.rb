@@ -12,7 +12,7 @@ class FileSearch
 
 		def search_mp3(dir_path)
 			files = Dir.glob(dir_path + "/**/*.mp3")
-			files.count
+			files
 		end
 	end
 end
