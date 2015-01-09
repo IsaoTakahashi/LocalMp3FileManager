@@ -35,3 +35,4 @@ build/
 
 # specific setting for the application
 *.lst
+*.sqlite
