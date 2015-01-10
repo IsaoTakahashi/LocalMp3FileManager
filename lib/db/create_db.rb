@@ -19,6 +19,6 @@ DB.create_table :mp3files do
 	String :artist
 	String :title
 	String :album
-	String :d_get
+	String :d_created
 	Integer :size
 end

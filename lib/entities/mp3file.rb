@@ -8,7 +8,7 @@ class Mp3File
     @artist = art || ""
     @title = tit || ""
     @album = alb || ""
-    @d_get = dat || ""
+    @d_created = dat || ""
     @size = size
   end
 
@@ -16,5 +16,5 @@ class Mp3File
     puts "Artist: " + @artist + " | Title: " + @title
   end
 
-  attr_accessor :file_path,:file_name, :artist,:title,:album,:d_get,:size
+  attr_accessor :file_path,:file_name, :artist,:title,:album,:d_created,:size
 end

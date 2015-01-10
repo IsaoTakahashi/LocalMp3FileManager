@@ -20,6 +20,7 @@ dir_lst.each do |dir_path|
 
 
   files.each do |file|
+  	p file
     Mp3Info.open(file){ |mp3|
       mp3.tag2.options[:encoding] = 0
 
@@ -34,19 +35,14 @@ dir_lst.each do |dir_path|
         @album = mp3.tag2.TALB
       end
 
-      @artist_name = strict_convert_into_utf16(@artist_name)
-      #@title = strict_convert_into_utf16(@title)
-      #@album = strict_convert_into_utf16(@album)
-
       mp3File = Mp3File.new(file,
                             File.basename(file),
                             @artist_name,
                             @title,
                             @album,
-                            File.mtime(file),
+                            File.ctime(file),
                             File.size(file))
-      p mp3.tag2.encode("Shift_JIS") if mp3.tag2.TPE1
-      p unescape(mp3File.artist)
+      p mp3File.artist + " | " + mp3File.title
       next if mp3files.filter(:file_path => file).all.count >= 1
 
 
@@ -55,7 +51,7 @@ dir_lst.each do |dir_path|
                       :artist => sanitize_string(mp3File.artist),
                       :title => sanitize_string(mp3File.title),
                       :album => sanitize_string(mp3File.album),
-                      :d_get => mp3File.d_get,
+                      :d_created => mp3File.d_created,
                       :size => mp3File.size)
     }
   end
