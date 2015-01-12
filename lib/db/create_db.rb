@@ -22,3 +22,9 @@ DB.create_table :mp3files do
 	String :d_created
 	Integer :size
 end
+
+DB.create_table :karaoke_artists do
+	primary_key :id
+	String :name
+	String :artist_id
+end
