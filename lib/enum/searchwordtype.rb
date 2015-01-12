@@ -1,5 +1,6 @@
 module SearchWordType
-	LEFT_HAND = 1
-	PARTIAL_MATCH = 2
-	COMPLETE_MATCH = 3
+	ARTIST = 1
+	SONG = 2
+	TIED_UP = 3
+	LYRIC = 4
 end
