@@ -38,3 +38,11 @@ DB.create_table :karaoke_songs do
     String :artist_name_karaoke
     String :artist_name_mp3
 end
+
+DB.create_table :karaoke_crawled_songs do
+	primary_key :id
+    String :gakkyoku_id
+    String :artist_id
+    String :title_karaoke
+    String :artist_name_karaoke
+end
