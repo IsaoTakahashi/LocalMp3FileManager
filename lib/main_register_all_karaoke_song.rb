@@ -4,6 +4,7 @@
 require 'nokogiri'
 require 'open-uri'
 require 'sequel'
+require 'parallel'
 
 DB = Sequel.sqlite('db/mp3_kara.sqlite')
 
@@ -14,13 +15,16 @@ karaoke_crawled_songs = DB[:karaoke_crawled_songs]
 url = "http://joysound.com/ex/search/song.htm?gakkyokuId="
 
 # min and max id count
-id_min = 260001
-id_max = 300000
+id_min = 728615
+id_max = 770000
+
+#ids = Array(id_min..id_max)
 
 charset = 'utf-8'
 
 p "Start from " + id_min.to_s
 
+#Parallel.each(ids, in_threads: 2) do |i|
 for i in id_min..id_max
 
 	p i if i%100 == 0
@@ -31,6 +35,7 @@ for i in id_min..id_max
     begin
         html = open(url+id)
     rescue Exception => e
+    	p e
         #p id + " may not be found."
         next
     end
