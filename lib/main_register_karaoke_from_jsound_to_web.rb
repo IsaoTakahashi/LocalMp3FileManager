@@ -21,15 +21,9 @@ DB = Sequel.sqlite('db/mp3_kara.sqlite')
 
 karaoke_crawled_songs = DB[:karaoke_crawled_songs]
 
-
-# target url
-url = "http://joysound.com/ex/search/song.htm?gakkyokuId="
-
 # min and max id count
 id_min = 750000
-id_max = 760000
-
-#ids = Array(id_min..id_max)
+id_max = 900000
 
 charset = 'utf-8'
 
@@ -57,27 +51,24 @@ for i in id_min..id_max
         next
     end
 
-    id = i.to_s
-    html = nil
+    sleep(0.5)
 
+    id = i.to_s
+    url = 'https://mspxy.joysound.com/Common/ContentsDetail?kind=songId&selSongNo=' + i.to_s + '&interactionFlg=0&apiVer=1.0'
+
+    result = nil
     begin
-        html = open(url+id)
+        result = RestClient.post url, nil, {:content_type => 'application/x-www-form-urlencoded;charset=UTF-8', 'X-JSP-APP-NAME' => '0000800'}
     rescue Exception => e
+        p 'Error: ' + id
         p e
         next
     end
 
-    doc = Nokogiri::HTML.parse(html, nil, charset)
-
-    song_title = doc.title.gsub('：カラオケ楽曲検索｜JOYSOUND.com','')
-    artist_nodes = doc.xpath('//td[@class="artist"]')
-
-    next unless artist_nodes.size > 0
-
-    artist_node = artist_nodes[0].css('p').css('a')
-    artist_name = artist_node.inner_text
-
-    artist_id = artist_node.attribute('href').value.match(/artistId=(\d+)/)[1]
+    json_result = JSON.parse(result)
+    song_title = json_result['songName']
+    artist_name = json_result['artistInfo']['artistName']
+    artist_id = json_result['artistInfo']['artistId']
 
     p id + " -- " + artist_name + " | " + song_title
 
@@ -95,3 +86,13 @@ for i in id_min..id_max
 
     karaoke_array << karaoke_params
 end
+
+# upload remain songs
+if karaoke_array.size > 0 then
+    p karaoke_array
+    post_karaoke_song(karaoke_array.to_json)
+    karaoke_array = []
+end
+
+# refresh search keyword
+result = RestClient.get 'http://ec2-54-92-60-143.ap-northeast-1.compute.amazonaws.com/karaoke/search/refresh'
